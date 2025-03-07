@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>产品推广App原型</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .phone-container {
+            width: 375px;
+            height: 812px;
+            border-radius: 40px;
+            overflow: hidden;
+            border: 10px solid #000;
+            margin: 20px;
+            position: relative;
+        }
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .prototype-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(415px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .prototype-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .prototype-label {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-white shadow p-4 mb-6">
+        <h1 class="text-2xl font-bold text-center">产品推广App原型展示</h1>
+    </header>
+    
+    <div class="prototype-grid">
+        <div class="prototype-item">
+            <div class="phone-container">
+                <iframe src="splash.html" class="phone-screen"></iframe>
+            </div>
+            <div class="prototype-label">启动页</div>
+        </div>
+        
+        <div class="prototype-item">
+            <div class="phone-container">
+                <iframe src="login.html" class="phone-screen"></iframe>
+            </div>
+            <div class="prototype-label">登录/注册</div>
+        </div>
+        
+        <div class="prototype-item">
+            <div class="phone-container">
+                <iframe src="home.html" class="phone-screen"></iframe>
+            </div>
+            <div class="prototype-label">首页</div>
+        </div>
+        
+        <div class="prototype-item">
+            <div class="phone-container">
+                <iframe src="product-detail.html" class="phone-screen"></iframe>
+            </div>
+            <div class="prototype-label">产品详情</div>
+        </div>
+        
+        <div class="prototype-item">
+            <div class="phone-container">
+                <iframe src="developer-profile.html" class="phone-screen"></iframe>
+            </div>
+            <div class="prototype-label">开发者资料</div>
+        </div>
+        
+        <div class="prototype-item">
+            <div class="phone-container">
+                <iframe src="user-profile.html" class="phone-screen"></iframe>
+            </div>
+            <div class="prototype-label">用户个人中心</div>
+        </div>
+        
+        <div class="prototype-item">
+            <div class="phone-container">
+                <iframe src="settings.html" class="phone-screen"></iframe>
+            </div>
+            <div class="prototype-label">设置</div>
+        </div>
+        
+        <div class="prototype-item">
+            <div class="phone-container">
+                <iframe src="search.html" class="phone-screen"></iframe>
+            </div>
+            <div class="prototype-label">搜索</div>
+        </div>
+        
+        <div class="prototype-item">
+            <div class="phone-container">
+                <iframe src="notifications.html" class="phone-screen"></iframe>
+            </div>
+            <div class="prototype-label">通知</div>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发者资料</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .ios-status-bar {
+            height: 44px;
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            font-size: 14px;
+        }
+        
+        .ios-tab-bar {
+            height: 83px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding-bottom: 20px; /* For home indicator */
+        }
+        
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #8e8e93;
+            font-size: 10px;
+        }
+        
+        .tab-item.active {
+            color: #007aff;
+        }
+        
+        .tab-icon {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+        
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 83px; /* Same as tab bar height */
+        }
+        
+        .header {
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            background-color: #f9f9f9;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .back-button {
+            margin-right: 16px;
+            font-size: 18px;
+        }
+        
+        .developer-header {
+            padding: 30px 16px;
+            background-color: white;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .developer-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 16px;
+            border: 3px solid #f2f2f7;
+        }
+        
+        .developer-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .developer-bio {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+        
+        .developer-stats {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 16px;
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #8e8e93;
+        }
+        
+        .follow-button {
+            padding: 8px 24px;
+            background-color: #007aff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .section-title {
+            padding: 16px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 16px;
+            display: flex;
+        }
+        
+        .product-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            margin-right: 16px;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            flex: 1;
+        }
+        
+        .product-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        
+        .product-category {
+            font-size: 14px;
+            color: #8e8e93;
+            margin-bottom: 8px;
+        }
+        
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .product-rating {
+            display: flex;
+            align-items: center;
+            color: #8e8e93;
+        }
+        
+        .product-rating i {
+            color: #ffcc00;
+            margin-right: 4px;
+        }
+        
+        .product-price {
+            color: #8e8e93;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS Status Bar -->
+    <div class="ios-status-bar">
+        <div>9:41</div>
+        <div>
+            <span class="mr-2"><i class="fas fa-signal"></i></span>
+            <span class="mr-2"><i class="fas fa-wifi"></i></span>
+            <span><i class="fas fa-battery-full"></i></span>
+        </div>
+    </div>
+    
+    <!-- Content Area -->
+    <div class="content-area">
+        <!-- Header -->
+        <div class="header">
+            <a href="product-detail.html" class="back-button"><i class="fas fa-chevron-left"></i></a>
+            <h1 class="text-xl font-bold">开发者资料</h1>
+        </div>
+        
+        <!-- Developer Header -->
+        <div class="developer-header">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e" class="developer-avatar" alt="开发者头像">
+            <div class="developer-name">张小明</div>
+            <div class="developer-bio">独立开发者，专注于效率工具和生产力应用的开发。致力于创造简洁、实用、美观的应用程序。</div>
+            <div class="developer-stats">
+                <div class="stat-item">
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">应用</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">4.7</div>
+                    <div class="stat-label">平均评分</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">10K+</div>
+                    <div class="stat-label">用户</div>
+                </div>
+            </div>
+            <button class="follow-button">关注</button>
+        </div>
+        
+        <!-- Developer Products -->
+        <div class="section-title">开发的应用</div>
+        
+        <!-- Product 1 -->
+        <a href="product-detail.html" class="product-card">
+            <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7" class="product-icon" alt="产品图标">
+            <div class="product-info">
+                <div class="product-title">效率笔记</div>
+                <div class="product-category">效率 · 工具</div>
+                <div class="product-meta">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <span>4.8</span>
+                    </div>
+                    <div class="product-price">免费</div>
+                </div>
+            </div>
+        </a>
+        
+        <!-- Product 2 -->
+        <a href="#" class="product-card">
+            <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c" class="product-icon" alt="产品图标">
+            <div class="product-info">
+                <div class="product-title">专注时钟</div>
+                <div class="product-category">效率 · 时间管理</div>
+                <div class="product-meta">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <span>4.6</span>
+                    </div>
+                    <div class="product-price">¥12.00</div>
+                </div>
+            </div>
+        </a>
+        
+        <!-- Product 3 -->
+        <a href="#" class="product-card">
+            <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3" class="product-icon" alt="产品图标">
+            <div class="product-info">
+                <div class="product-title">轻语翻译</div>
+                <div class="product-category">工具 · 翻译</div>
+                <div class="product-meta">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <span>4.9</span>
+                    </div>
+                    <div class="product-price">¥18.00</div>
+                </div>
+            </div>
+        </a>
+        
+        <!-- Product 4 -->
+        <a href="#" class="product-card">
+            <img src="https://images.unsplash.com/photo-1512758017271-d7b84c2113f1" class="product-icon" alt="产品图标">
+            <div class="product-info">
+                <div class="product-title">每日习惯</div>
+                <div class="product-category">健康 · 生活方式</div>
+                <div class="product-meta">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <span>4.5</span>
+                    </div>
+                    <div class="product-price">免费</div>
+                </div>
+            </div>
+        </a>
+        
+        <!-- Product 5 -->
+        <a href="#" class="product-card">
+            <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66" class="product-icon" alt="产品图标">
+            <div class="product-info">
+                <div class="product-title">简悦阅读</div>
+                <div class="product-category">阅读 · 教育</div>
+                <div class="product-meta">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <span>4.7</span>
+                    </div>
+                    <div class="product-price">¥15.00</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    
+    <!-- iOS Tab Bar -->
+    <div class="ios-tab-bar">
+        <a href="home.html" class="tab-item active">
+            <div class="tab-icon"><i class="fas fa-home"></i></div>
+            <div>首页</div>
+        </a>
+        <a href="search.html" class="tab-item">
+            <div class="tab-icon"><i class="fas fa-search"></i></div>
+            <div>发现</div>
+        </a>
+        <a href="notifications.html" class="tab-item">
+            <div class="tab-icon"><i class="fas fa-bell"></i></div>
+            <div>通知</div>
+        </a>
+        <a href="user-profile.html" class="tab-item">
+            <div class="tab-icon"><i class="fas fa-user"></i></div>
+            <div>我的</div>
+        </a>
+    </div>
+</body>
+</html> 

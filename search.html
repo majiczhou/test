@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜索</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .ios-status-bar {
+            height: 44px;
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            font-size: 14px;
+        }
+        
+        .ios-tab-bar {
+            height: 83px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding-bottom: 20px; /* For home indicator */
+        }
+        
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #8e8e93;
+            font-size: 10px;
+        }
+        
+        .tab-item.active {
+            color: #007aff;
+        }
+        
+        .tab-icon {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+        
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 83px; /* Same as tab bar height */
+        }
+        
+        .search-header {
+            padding: 10px 16px;
+            background-color: #f9f9f9;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            padding: 8px 12px;
+        }
+        
+        .search-icon {
+            color: #8e8e93;
+            margin-right: 8px;
+        }
+        
+        .search-input {
+            flex: 1;
+            border: none;
+            background-color: transparent;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .search-cancel {
+            color: #007aff;
+            font-size: 16px;
+            margin-left: 12px;
+        }
+        
+        .section-title {
+            padding: 16px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .hot-searches {
+            background-color: white;
+            padding: 0 16px 16px;
+        }
+        
+        .hot-search-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .hot-search-item {
+            background-color: #f2f2f7;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .category-section {
+            margin-top: 20px;
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 0 16px 16px;
+            background-color: white;
+        }
+        
+        .category-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .category-name {
+            font-size: 12px;
+        }
+        
+        .trending-section {
+            margin-top: 20px;
+            background-color: white;
+        }
+        
+        .trending-list {
+            padding: 0 16px;
+        }
+        
+        .trending-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .trending-rank {
+            width: 24px;
+            height: 24px;
+            background-color: #f2f2f7;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            margin-right: 12px;
+        }
+        
+        .trending-rank.top {
+            background-color: #007aff;
+            color: white;
+        }
+        
+        .trending-info {
+            flex: 1;
+        }
+        
+        .trending-name {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .trending-category {
+            font-size: 12px;
+            color: #8e8e93;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS Status Bar -->
+    <div class="ios-status-bar">
+        <div>9:41</div>
+        <div>
+            <span class="mr-2"><i class="fas fa-signal"></i></span>
+            <span class="mr-2"><i class="fas fa-wifi"></i></span>
+            <span><i class="fas fa-battery-full"></i></span>
+        </div>
+    </div>
+    
+    <!-- Content Area -->
+    <div class="content-area">
+        <!-- Search Header -->
+        <div class="search-header">
+            <div class="search-bar">
+                <div class="search-icon"><i class="fas fa-search"></i></div>
+                <input type="text" class="search-input" placeholder="搜索应用、开发者...">
+                <div class="search-cancel">取消</div>
+            </div>
+        </div>
+        
+        <!-- Hot Searches -->
+        <div class="hot-searches">
+            <div class="section-title">热门搜索</div>
+            <div class="hot-search-list">
+                <div class="hot-search-item">效率工具</div>
+                <div class="hot-search-item">笔记应用</div>
+                <div class="hot-search-item">时间管理</div>
+                <div class="hot-search-item">翻译工具</div>
+                <div class="hot-search-item">记账软件</div>
+                <div class="hot-search-item">阅读器</div>
+                <div class="hot-search-item">习惯养成</div>
+                <div class="hot-search-item">日程规划</div>
+            </div>
+        </div>
+        
+        <!-- Categories -->
+        <div class="category-section">
+            <div class="section-title">分类浏览</div>
+            <div class="category-grid">
+                <a href="#" class="category-item">
+                    <div class="category-icon bg-blue-100 text-blue-500"><i class="fas fa-tools"></i></div>
+                    <div class="category-name">工具</div>
+                </a>
+                <a href="#" class="category-item">
+                    <div class="category-icon bg-green-100 text-green-500"><i class="fas fa-tasks"></i></div>
+                    <div class="category-name">生产力</div>
+                </a>
+                <a href="#" class="category-item">
+                    <div class="category-icon bg-purple-100 text-purple-500"><i class="fas fa-users"></i></div>
+                    <div class="category-name">社交</div>
+                </a>
+                <a href="#" class="category-item">
+                    <div class="category-icon bg-yellow-100 text-yellow-500"><i class="fas fa-book"></i></div>
+                    <div class="category-name">教育</div>
+                </a>
+                <a href="#" class="category-item">
+                    <div class="category-icon bg-red-100 text-red-500"><i class="fas fa-gamepad"></i></div>
+                    <div class="category-name">娱乐</div>
+                </a>
+                <a href="#" class="category-item">
+                    <div class="category-icon bg-indigo-100 text-indigo-500"><i class="fas fa-heartbeat"></i></div>
+                    <div class="category-name">健康</div>
+                </a>
+                <a href="#" class="category-item">
+                    <div class="category-icon bg-pink-100 text-pink-500"><i class="fas fa-shopping-bag"></i></div>
+                    <div class="category-name">购物</div>
+                </a>
+                <a href="#" class="category-item">
+                    <div class="category-icon bg-gray-100 text-gray-500"><i class="fas fa-ellipsis-h"></i></div>
+                    <div class="category-name">更多</div>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Trending -->
+        <div class="trending-section">
+            <div class="section-title">热门榜单</div>
+            <div class="trending-list">
+                <a href="product-detail.html" class="trending-item">
+                    <div class="trending-rank top">1</div>
+                    <div class="trending-info">
+                        <div class="trending-name">效率笔记</div>
+                        <div class="trending-category">效率 · 工具</div>
+                    </div>
+                </a>
+                <a href="#" class="trending-item">
+                    <div class="trending-rank top">2</div>
+                    <div class="trending-info">
+                        <div class="trending-name">专注时钟</div>
+                        <div class="trending-category">效率 · 时间管理</div>
+                    </div>
+                </a>
+                <a href="#" class="trending-item">
+                    <div class="trending-rank top">3</div>
+                    <div class="trending-info">
+                        <div class="trending-name">轻语翻译</div>
+                        <div class="trending-category">工具 · 翻译</div>
+                    </div>
+                </a>
+                <a href="#" class="trending-item">
+                    <div class="trending-rank">4</div>
+                    <div class="trending-info">
+                        <div class="trending-name">每日习惯</div>
+                        <div class="trending-category">健康 · 生活方式</div>
+                    </div>
+                </a>
+                <a href="#" class="trending-item">
+                    <div class="trending-rank">5</div>
+                    <div class="trending-info">
+                        <div class="trending-name">简悦阅读</div>
+                        <div class="trending-category">阅读 · 教育</div>
+                    </div>
+                </a>
+                <a href="#" class="trending-item">
+                    <div class="trending-rank">6</div>
+                    <div class="trending-info">
+                        <div class="trending-name">轻松记账</div>
+                        <div class="trending-category">财务 · 工具</div>
+                    </div>
+                </a>
+                <a href="#" class="trending-item">
+                    <div class="trending-rank">7</div>
+                    <div class="trending-info">
+                        <div class="trending-name">日程管家</div>
+                        <div class="trending-category">效率 · 日历</div>
+                    </div>
+                </a>
+                <a href="#" class="trending-item">
+                    <div class="trending-rank">8</div>
+                    <div class="trending-info">
+                        <div class="trending-name">智能扫描</div>
+                        <div class="trending-category">工具 · 办公</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- iOS Tab Bar -->
+    <div class="ios-tab-bar">
+        <a href="home.html" class="tab-item">
+            <div class="tab-icon"><i class="fas fa-home"></i></div>
+            <div>首页</div>
+        </a>
+        <a href="search.html" class="tab-item active">
+            <div class="tab-icon"><i class="fas fa-search"></i></div>
+            <div>发现</div>
+        </a>
+        <a href="notifications.html" class="tab-item">
+            <div class="tab-icon"><i class="fas fa-bell"></i></div>
+            <div>通知</div>
+        </a>
+        <a href="user-profile.html" class="tab-item">
+            <div class="tab-icon"><i class="fas fa-user"></i></div>
+            <div>我的</div>
+        </a>
+    </div>
+</body>
+</html> 
